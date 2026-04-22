@@ -13,6 +13,9 @@ use Ineersa\AiIndex\Index\DiWiringMapLoader;
 use Ineersa\AiIndex\Index\FileIndexWriter;
 use Ineersa\AiIndex\Index\IndexGenerationPipeline;
 use Ineersa\AiIndex\Index\NamespaceIndexRegenerator;
+use Ineersa\AiIndex\Wiring\SymfonyContainerBuilderFactory;
+use Ineersa\AiIndex\Wiring\WiringMapExporter;
+use Ineersa\AiIndex\Wiring\WiringReferenceExtractor;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -34,6 +37,7 @@ final class GenerateCommand extends Command
             ->addOption('changed', null, InputOption::VALUE_NONE, 'Process only git-changed files')
             ->addOption('force', null, InputOption::VALUE_NONE, 'Regenerate even if generated files are newer')
             ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Show actions without writing files')
+            ->addOption('skip-wiring', null, InputOption::VALUE_NONE, 'Skip wiring export pre-step')
             ->addOption('skip-namespace', null, InputOption::VALUE_NONE, 'Skip namespace index regeneration')
             ->addArgument('targets', InputArgument::IS_ARRAY, 'Optional target files/directories');
     }
@@ -53,6 +57,7 @@ final class GenerateCommand extends Command
         $changed = (bool) $input->getOption('changed');
         $force = (bool) $input->getOption('force');
         $dryRun = (bool) $input->getOption('dry-run');
+        $skipWiring = (bool) $input->getOption('skip-wiring');
         $skipNamespace = (bool) $input->getOption('skip-namespace');
 
         /** @var list<string> $targets */
@@ -62,6 +67,52 @@ final class GenerateCommand extends Command
         ));
 
         $config = (new ConfigLoader())->load($projectRoot);
+
+        $diWiringByClassOverride = null;
+
+        if (!$skipWiring) {
+            $wiringExporter = new WiringMapExporter(
+                new SymfonyContainerBuilderFactory(),
+                new WiringReferenceExtractor(),
+            );
+
+            try {
+                $wiringResult = $wiringExporter->export(
+                    config: $config,
+                    outputPathOverride: null,
+                    dryRun: $dryRun,
+                );
+            } catch (\Throwable $exception) {
+                $output->writeln(sprintf('<error>wiring-map: failed - %s</error>', $exception->getMessage()));
+
+                return Command::FAILURE;
+            }
+
+            $wiringOutputPath = self::relativePath($projectRoot, (string) $wiringResult['outputPath']);
+
+            if ($dryRun) {
+                $output->writeln(sprintf(
+                    '<info>wiring-map: ok (dry-run, output=%s, classes=%d)</info>',
+                    $wiringOutputPath,
+                    (int) $wiringResult['classCount'],
+                ));
+            } else {
+                $output->writeln(sprintf(
+                    '<info>wiring-map: ok (classes=%d,service_definitions=%d,aliases=%d,injected_edges=%d,output=%s)</info>',
+                    (int) $wiringResult['classCount'],
+                    (int) $wiringResult['definitionCount'],
+                    (int) $wiringResult['aliasCount'],
+                    (int) $wiringResult['injectedEdgeCount'],
+                    $wiringOutputPath,
+                ));
+            }
+
+            /** @var array<string, array<string, mixed>> $wiringByClass */
+            $wiringByClass = $wiringResult['wiringByClass'];
+            $diWiringByClassOverride = $wiringByClass;
+        } else {
+            $output->writeln('<comment>wiring-map: skipped (--skip-wiring)</comment>');
+        }
 
         $pipeline = new IndexGenerationPipeline(
             new PhpTargetResolver(),
@@ -81,6 +132,7 @@ final class GenerateCommand extends Command
             force: $force,
             dryRun: $dryRun,
             skipNamespace: $skipNamespace,
+            diWiringByClassOverride: $diWiringByClassOverride,
         );
 
         /** @var list<string> $files */
@@ -157,6 +209,17 @@ final class GenerateCommand extends Command
         }
 
         return Command::SUCCESS;
+    }
+
+    private static function relativePath(string $projectRoot, string $path): string
+    {
+        $prefix = rtrim($projectRoot, '/').'/';
+
+        if (str_starts_with($path, $prefix)) {
+            return substr($path, strlen($prefix));
+        }
+
+        return $path;
     }
 
     /**

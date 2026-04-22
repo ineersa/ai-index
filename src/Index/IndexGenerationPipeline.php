@@ -24,6 +24,7 @@ final readonly class IndexGenerationPipeline
 
     /**
      * @param list<string> $targets
+     * @param null|array<string, array<string, mixed>> $diWiringByClassOverride
      *
      * @return array{
      *   files: list<string>,
@@ -44,6 +45,7 @@ final readonly class IndexGenerationPipeline
         bool $force,
         bool $dryRun,
         bool $skipNamespace,
+        ?array $diWiringByClassOverride = null,
     ): array {
         $phpFiles = $this->targetResolver->resolve($config, $all, $changed, $targets);
 
@@ -77,13 +79,18 @@ final readonly class IndexGenerationPipeline
 
         $warnings = [];
         $wiringPath = (string) $config->wiring['outputPath'];
-        $diWiringByClass = $this->diWiringMapLoader->loadByClass($wiringPath);
 
-        if ([] === $diWiringByClass) {
-            $warnings[] = sprintf(
-                'No DI wiring map found at %s; wiring metadata will be omitted.',
-                $wiringPath,
-            );
+        if (is_array($diWiringByClassOverride)) {
+            $diWiringByClass = $diWiringByClassOverride;
+        } else {
+            $diWiringByClass = $this->diWiringMapLoader->loadByClass($wiringPath);
+
+            if ([] === $diWiringByClass) {
+                $warnings[] = sprintf(
+                    'No DI wiring map found at %s; wiring metadata will be omitted.',
+                    $wiringPath,
+                );
+            }
         }
 
         $actions = [];

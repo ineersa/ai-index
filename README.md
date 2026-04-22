@@ -64,9 +64,10 @@ From the Symfony project root:
 
 ```bash
 vendor/bin/ai-index setup
-vendor/bin/ai-index wiring:export
 vendor/bin/ai-index generate --changed
 ```
+
+`generate` auto-runs wiring export first (parity with the original flow).
 
 For full regeneration:
 
@@ -90,7 +91,6 @@ Behavior:
 - copies templates:
   - `.agents/skills/ai-index/SKILL.md`
   - `.agents/index-maintainer.md`
-  - `.pi/extensions/ai-index-watch.ts`
 - upserts `AGENTS.md` section between markers:
   - `<!-- ai-index:begin -->`
   - `<!-- ai-index:end -->`
@@ -111,10 +111,16 @@ Default output: `var/reports/di-wiring.toon`.
 Generate class docs + namespace indexes.
 
 ```bash
-vendor/bin/ai-index generate [--project-root=...] [--all|--changed|<targets...>] [--force] [--dry-run] [--skip-namespace]
+vendor/bin/ai-index generate [--project-root=...] [--all|--changed|<targets...>] [--force] [--dry-run] [--skip-wiring] [--skip-namespace]
 ```
 
+By default this command:
+1. exports DI wiring map,
+2. regenerates class docs indexes,
+3. regenerates namespace indexes (unless `--skip-namespace`).
+
 Outputs:
+- `var/reports/di-wiring.toon`
 - `src/**/docs/*.toon`
 - `src/**/ai-index.toon`
 
@@ -166,7 +172,7 @@ return [
 ## Notes / troubleshooting
 
 - Callgraph is optional. If PHPStan callgraph config is missing, generation continues without callers/callees.
-- `wiring:export` needs a bootable Symfony kernel in the target project.
+- `generate` and `wiring:export` need a bootable Symfony kernel in the target project unless `--skip-wiring` is used.
 - `vendor/bin/ai-index` is a Composer-generated proxy. The `../ineersa/ai-index/bin/ai-index` path inside that file is expected.
 
 ---
@@ -178,6 +184,6 @@ composer install
 composer validate --no-check-publish
 ./bin/ai-index list --raw
 ./bin/ai-index setup --dry-run
-./bin/ai-index generate --dry-run
+./bin/ai-index generate --dry-run --skip-wiring
 ./bin/ai-index wiring:export --dry-run
 ```

@@ -18,7 +18,6 @@ Implemented **Phase 1 + 2 + 3 + 4** for standalone `ai-index` package.
 - Templates:
   - `resources/templates/.agents/skills/ai-index/SKILL.md`
   - `resources/templates/.agents/index-maintainer.md`
-  - `resources/templates/.pi/extensions/ai-index-watch.ts`
   - `resources/templates/AGENTS.section.md`
 
 Implemented `ai-index setup [--project-root=...] [--dry-run] [--force]` with idempotent marker-based AGENTS upsert.
@@ -77,6 +76,19 @@ Capabilities:
 
 ---
 
+## Phase 5 — parity fix (auto wiring on generate)
+
+Implemented original behavior parity:
+- `generate` now auto-runs DI wiring export before class/namespace generation.
+- Added `--skip-wiring` option for explicit opt-out.
+- Generate pipeline now accepts in-memory wiring map override from exporter, so dry-runs include wiring context without requiring a persisted wiring file.
+- `WiringMapExporter` now returns `wiringByClass` payload for direct pipeline injection.
+
+Result:
+- running `vendor/bin/ai-index generate ...` now produces wiring-enriched class `.toon` files by default (same intended flow as legacy orchestration).
+
+---
+
 ## Documentation
 
 - Added package README with installation, configuration, command usage, and troubleshooting:
@@ -110,8 +122,12 @@ Result:
 - `composer dump-autoload` ✅
 - `./bin/ai-index list --raw` ✅
 - `./bin/ai-index setup --dry-run` + idempotency ✅
-- `./bin/ai-index generate --dry-run` / normal run ✅
+- `./bin/ai-index generate --dry-run --skip-wiring` ✅
 - `./bin/ai-index wiring:export --dry-run` / normal run (in consumer) ✅
+- consumer smoke (`symfony-web-template`):
+  - `composer exec ai-index -- generate --dry-run --all --force --skip-namespace` ✅
+  - `composer exec ai-index -- generate --all --force --skip-namespace` ✅
+  - verified `src/docs/Kernel.toon` contains `wiring` block ✅
 
 ---
 

@@ -25,7 +25,8 @@ final readonly class WiringMapExporter
      *   definitionCount: int,
      *   aliasCount: int,
      *   injectedEdgeCount: int,
-     *   dryRun: bool
+     *   dryRun: bool,
+     *   wiringByClass: array<string, array<string, mixed>>
      * }
      */
     public function export(IndexConfig $config, ?string $outputPathOverride = null, bool $dryRun = false): array
@@ -202,6 +203,34 @@ final readonly class WiringMapExporter
             $classEntries[] = $entry;
         }
 
+        $wiringByClass = [];
+        foreach ($classEntries as $classEntry) {
+            $className = is_string($classEntry['class'] ?? null) ? (string) $classEntry['class'] : '';
+            if ('' === $className) {
+                continue;
+            }
+
+            $wiring = [];
+            $serviceDefinitions = $classEntry['serviceDefinitions'] ?? null;
+            if (is_array($serviceDefinitions) && [] !== $serviceDefinitions) {
+                $wiring['serviceDefinitions'] = $serviceDefinitions;
+            }
+
+            $aliases = $classEntry['aliases'] ?? null;
+            if (is_array($aliases) && [] !== $aliases) {
+                $wiring['aliases'] = $aliases;
+            }
+
+            $injectedInto = $classEntry['injectedInto'] ?? null;
+            if (is_array($injectedInto) && [] !== $injectedInto) {
+                $wiring['injectedInto'] = $injectedInto;
+            }
+
+            if ([] !== $wiring) {
+                $wiringByClass[$className] = $wiring;
+            }
+        }
+
         $payload = [
             'spec' => (string) ($config->wiring['spec'] ?? 'agent-core.di-wiring/v1'),
             'classes' => $classEntries,
@@ -229,6 +258,7 @@ final readonly class WiringMapExporter
             'aliasCount' => $aliasCount,
             'injectedEdgeCount' => $injectedEdgeCount,
             'dryRun' => $dryRun,
+            'wiringByClass' => $wiringByClass,
         ];
     }
 
