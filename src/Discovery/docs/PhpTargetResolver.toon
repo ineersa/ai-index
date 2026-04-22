@@ -1,0 +1,10 @@
+spec: agent-core.file-index/v1
+file: PhpTargetResolver.php
+class: "Ineersa\\AiIndex\\Discovery\\PhpTargetResolver"
+type: final class
+methods[5]{method,start,end,limit,symbolLine,symbolColumn,signature}:
+  resolve,11,40,30,16,21,"public function resolve(IndexConfig $config, bool $all, bool $changed, array $targets): array"
+  collectPhpFiles,42,76,35,45,22,"private function collectPhpFiles(string $rootDirectory): array"
+  collectChangedPhpFiles,78,132,55,81,22,"private function collectChangedPhpFiles(IndexConfig $config): array"
+  collectFromTargets,134,160,27,139,22,"private function collectFromTargets(array $targets, string $projectRoot): array"
+  resolveTargetPath,162,175,14,162,22,"private function resolveTargetPath(string $target, string $projectRoot): ?string"

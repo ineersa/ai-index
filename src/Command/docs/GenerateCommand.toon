@@ -1,0 +1,8 @@
+spec: agent-core.file-index/v1
+file: GenerateCommand.php
+class: "Ineersa\\AiIndex\\Command\\GenerateCommand"
+type: final class
+methods[3]{method,start,end,limit,symbolLine,symbolColumn,signature}:
+  configure,29,39,11,29,24,"protected function configure(): void"
+  execute,41,160,120,41,24,"protected function execute(InputInterface $input, OutputInterface $output): int"
+  summarizeCallGraph,162,185,24,167,29,"static private function summarizeCallGraph(array $map): array"

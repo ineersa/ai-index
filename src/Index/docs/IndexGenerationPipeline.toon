@@ -1,0 +1,17 @@
+spec: agent-core.file-index/v1
+file: IndexGenerationPipeline.php
+class: "Ineersa\\AiIndex\\Index\\IndexGenerationPipeline"
+type: readonly final class
+sections[1]{kind,start,end,limit,signatureLine}:
+  constructor,14,23,10,14
+constructorInputs[7]{param,type,required}:
+  $targetResolver,PhpTargetResolver,true
+  $callGraphGenerator,CallGraphGenerator,true
+  $callGraphLoader,CallGraphLoader,true
+  $diWiringMapLoader,DiWiringMapLoader,true
+  $classIndexBuilder,ClassIndexBuilder,true
+  $fileIndexWriter,FileIndexWriter,true
+  $namespaceIndexRegenerator,NamespaceIndexRegenerator,true
+methods[2]{method,start,end,limit,symbolLine,symbolColumn,signature}:
+  __construct,14,23,10,14,21,"public function __construct(PhpTargetResolver $targetResolver, CallGraphGenerator $callGraphGenerator, CallGraphLoader $callGraphLoader, DiWiringMapLoader $diWiringMapLoader, ClassIndexBuilder $classIndexBuilder, FileIndexWriter $fileIndexWriter, NamespaceIndexRegenerator $namespaceIndexRegenerator)"
+  run,25,147,123,39,21,"public function run(IndexConfig $config, bool $all, bool $changed, array $targets, bool $force, bool $dryRun, bool $skipNamespace): array"

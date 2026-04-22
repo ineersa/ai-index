@@ -1,0 +1,11 @@
+spec: agent-core.file-index/v1
+file: ConfigLoader.php
+class: "Ineersa\\AiIndex\\Config\\ConfigLoader"
+type: final class
+sections[1]{kind,start,end,limit,signatureLine}:
+  constructor,9,12,4,9
+constructorInputs[1]{param,type,required}:
+  $configFileName,string,false
+methods[2]{method,start,end,limit,symbolLine,symbolColumn,signature}:
+  __construct,9,12,4,9,21,public function __construct(string $configFileName = '.ai-index.php')
+  load,14,34,21,14,21,"public function load(string $projectRoot): IndexConfig"

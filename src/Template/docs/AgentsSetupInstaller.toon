@@ -1,0 +1,21 @@
+spec: agent-core.file-index/v1
+file: AgentsSetupInstaller.php
+class: "Ineersa\\AiIndex\\Template\\AgentsSetupInstaller"
+type: readonly final class
+sections[2]:
+  - kind: constants
+    start: 9
+    end: 10
+    limit: 2
+  - kind: constructor
+    start: 12
+    end: 15
+    limit: 4
+    signatureLine: 12
+constructorInputs[1]{param,type,required}:
+  $templateRoot,string,true
+methods[4]{method,start,end,limit,symbolLine,symbolColumn,signature}:
+  __construct,12,15,4,12,21,public function __construct(string $templateRoot)
+  install,17,41,25,20,21,"public function install(string $projectRoot, bool $dryRun = false, bool $force = false): array"
+  copyTemplate,43,74,32,43,22,"private function copyTemplate(string $projectRoot, string $relativePath, bool $dryRun, bool $force): string"
+  upsertAgentsSection,76,126,51,76,22,"private function upsertAgentsSection(string $projectRoot, bool $dryRun): string"

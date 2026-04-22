@@ -1,0 +1,6 @@
+spec: agent-core.ai-docs/v1
+namespace: Discovery
+fqcn: "App\\Discovery"
+updatedAt: 2026-04-22
+files[1]{file,type}:
+  PhpTargetResolver.php,final class

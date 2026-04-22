@@ -1,0 +1,19 @@
+spec: agent-core.file-index/v1
+file: IndexConfig.php
+class: "Ineersa\\AiIndex\\Config\\IndexConfig"
+type: readonly final class
+sections[1]{kind,start,end,limit,signatureLine,commentStart}:
+  constructor,9,22,14,14,9
+constructorInputs[6]{param,type,required}:
+  $projectRoot,string,true
+  $srcDir,string,true
+  $projectNamespacePrefix,string,true
+  $callGraph,array,true
+  $wiring,array,true
+  $indexSpec,array,true
+methods[5]{method,start,end,limit,symbolLine,symbolColumn,signature}:
+  __construct,9,22,14,14,21,"public function __construct(string $projectRoot, string $srcDir, string $projectNamespacePrefix, array $callGraph, array $wiring, array $indexSpec)"
+  fromArray,24,71,48,27,28,"static public function fromArray(string $projectRoot, array $config = []): self"
+  sourceDirectoryPath,73,76,4,73,21,"public function sourceDirectoryPath(): string"
+  sourceDirectoryRelativePath,78,88,11,78,21,"public function sourceDirectoryRelativePath(): string"
+  normalizePath,90,97,8,90,29,"static private function normalizePath(string $path, string $projectRoot): string"

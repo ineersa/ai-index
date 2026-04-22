@@ -1,0 +1,6 @@
+spec: agent-core.file-index/v1
+file: CallGraphGenerator.php
+class: "Ineersa\\AiIndex\\CallGraph\\CallGraphGenerator"
+type: final class
+methods[1]{method,start,end,limit,symbolLine,symbolColumn,signature}:
+  generate,11,94,84,14,21,"public function generate(IndexConfig $config, bool $dryRun = false): array"

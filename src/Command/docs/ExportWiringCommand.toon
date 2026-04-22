@@ -1,0 +1,8 @@
+spec: agent-core.file-index/v1
+file: ExportWiringCommand.php
+class: "Ineersa\\AiIndex\\Command\\ExportWiringCommand"
+type: final class
+methods[3]{method,start,end,limit,symbolLine,symbolColumn,signature}:
+  configure,20,26,7,20,24,"protected function configure(): void"
+  execute,28,56,29,28,24,"protected function execute(InputInterface $input, OutputInterface $output): int"
+  normalizePath,58,65,8,58,22,"private function normalizePath(string $path, string $projectRoot): string"

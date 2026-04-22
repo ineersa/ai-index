@@ -1,0 +1,10 @@
+spec: agent-core.ai-docs/v1
+namespace: Index
+fqcn: "App\\Index"
+updatedAt: 2026-04-22
+files[5]{file,type}:
+  ClassIndexBuilder.php,final class
+  DiWiringMapLoader.php,final class
+  FileIndexWriter.php,final class
+  IndexGenerationPipeline.php,readonly final class
+  NamespaceIndexRegenerator.php,final class

@@ -1,0 +1,6 @@
+spec: agent-core.file-index/v1
+file: CallGraphLoader.php
+class: "Ineersa\\AiIndex\\CallGraph\\CallGraphLoader"
+type: final class
+methods[1]{method,start,end,limit,symbolLine,symbolColumn,signature}:
+  load,9,96,88,12,21,"public function load(string $path, string $projectNamespacePrefix = ''): array"

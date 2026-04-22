@@ -1,0 +1,12 @@
+spec: agent-core.file-index/v1
+file: SetupCommand.php
+class: "Ineersa\\AiIndex\\Command\\SetupCommand"
+type: final class
+sections[1]{kind,start,end,limit,signatureLine}:
+  constructor,20,24,5,20
+constructorInputs[1]{param,type,required}:
+  $installer,AgentsSetupInstaller,true
+methods[3]{method,start,end,limit,symbolLine,symbolColumn,signature}:
+  __construct,20,24,5,20,21,public function __construct(AgentsSetupInstaller $installer)
+  configure,26,32,7,26,24,"protected function configure(): void"
+  execute,34,48,15,34,24,"protected function execute(InputInterface $input, OutputInterface $output): int"

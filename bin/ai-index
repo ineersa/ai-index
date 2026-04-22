@@ -1,0 +1,26 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use Ineersa\AiIndex\Command\ExportWiringCommand;
+use Ineersa\AiIndex\Command\GenerateCommand;
+use Ineersa\AiIndex\Command\SetupCommand;
+use Ineersa\AiIndex\Template\AgentsSetupInstaller;
+use Symfony\Component\Console\Application;
+
+$autoloadPath = $GLOBALS['_composer_autoload_path'] ?? dirname(__DIR__).'/vendor/autoload.php';
+if (!is_string($autoloadPath) || !is_file($autoloadPath)) {
+    throw new RuntimeException(sprintf('Composer autoload file not found at %s', (string) $autoloadPath));
+}
+
+require $autoloadPath;
+
+$templateRoot = dirname(__DIR__).'/resources/templates';
+
+$application = new Application('ai-index');
+$application->addCommand(new SetupCommand(new AgentsSetupInstaller($templateRoot)));
+$application->addCommand(new GenerateCommand());
+$application->addCommand(new ExportWiringCommand());
+
+exit($application->run());

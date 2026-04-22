@@ -1,0 +1,12 @@
+spec: agent-core.file-index/v1
+file: NamespaceIndexRegenerator.php
+class: "Ineersa\\AiIndex\\Index\\NamespaceIndexRegenerator"
+type: final class
+methods[7]{method,start,end,limit,symbolLine,symbolColumn,signature}:
+  regenerate,12,164,153,15,21,"public function regenerate(IndexConfig $config, bool $dryRun): array"
+  decodeToArray,166,178,13,169,22,"private function decodeToArray(string $path): ?array"
+  stripLegacyMetadata,180,190,11,185,22,"private function stripLegacyMetadata(array $index): array"
+  deriveFqcnFromSourceRelativeDirectory,192,215,24,192,22,"private function deriveFqcnFromSourceRelativeDirectory(string $relativeDirectory, string $projectNamespacePrefix): string"
+  isUsableExistingFqcn,217,233,17,217,22,"private function isUsableExistingFqcn(string $fqcn, string $projectNamespacePrefix): bool"
+  sourceRelativeDirectory,235,250,16,235,29,"static private function sourceRelativeDirectory(string $sourceDirectory, string $path): string"
+  relativePath,252,260,9,252,29,"static private function relativePath(string $projectRoot, string $path): string"

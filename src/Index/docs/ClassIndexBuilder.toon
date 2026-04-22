@@ -1,0 +1,29 @@
+spec: agent-core.file-index/v1
+file: ClassIndexBuilder.php
+class: "Ineersa\\AiIndex\\Index\\ClassIndexBuilder"
+type: final class
+sections[2]:
+  - kind: properties
+    start: 15
+    end: 16
+    limit: 2
+  - kind: constructor
+    start: 18
+    end: 22
+    limit: 5
+    signatureLine: 18
+methods[14]{method,start,end,limit,symbolLine,symbolColumn,signature}:
+  __construct,18,22,5,18,21,public function __construct()
+  build,24,137,114,30,21,"public function build(string $phpFile, string $code, array $callGraph, array $diWiringByClass, IndexConfig $config): array"
+  extractNamespace,139,151,13,142,22,"private function extractNamespace(array $ast): string"
+  findClassLikeNodes,153,177,25,158,22,"private function findClassLikeNodes(array $ast): array"
+  buildClassEntry,179,257,79,189,22,"private function buildClassEntry(Node\\Stmt\\Class_|Node\\Stmt\\Trait_|Node\\Stmt\\Enum_|Node\\Stmt\\Interface_ $class, string $namespace, string $code): array"
+  extractClassSections,259,324,66,262,22,"private function extractClassSections(Node\\Stmt\\Class_|Node\\Stmt\\Trait_|Node\\Stmt\\Enum_|Node\\Stmt\\Interface_ $class): array"
+  buildSectionFromNodes,326,346,21,331,22,"private function buildSectionFromNodes(string $kind, array $nodes): ?array"
+  findConstructorMethod,348,362,15,348,22,"private function findConstructorMethod(Node\\Stmt\\Class_|Node\\Stmt\\Trait_|Node\\Stmt\\Enum_|Node\\Stmt\\Interface_ $class): ?Node\\Stmt\\ClassMethod"
+  extractConstructorInputs,364,385,22,367,22,"private function extractConstructorInputs(?Node\\Stmt\\ClassMethod $constructor): array"
+  methodModifiers,387,406,20,387,22,"private function methodModifiers(Node\\Stmt\\ClassMethod $method): string"
+  methodVisibility,408,419,12,408,22,"private function methodVisibility(Node\\Stmt\\ClassMethod $method): string"
+  typeToString,421,450,30,421,22,"private function typeToString(Node\\ComplexType|Node\\Identifier|Node\\Name|null $type): string"
+  buildMethodParams,452,481,30,452,22,"private function buildMethodParams(Node\\Stmt\\ClassMethod $method): string"
+  offsetToColumn,483,497,15,483,22,"private function offsetToColumn(string $code, int $offset): int"

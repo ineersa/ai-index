@@ -1,0 +1,9 @@
+spec: agent-core.file-index/v1
+file: FileIndexWriter.php
+class: "Ineersa\\AiIndex\\Index\\FileIndexWriter"
+type: final class
+methods[4]{method,start,end,limit,symbolLine,symbolColumn,signature}:
+  isUpToDate,11,29,19,11,21,"public function isUpToDate(string $sourcePath, string $outputPath, bool $force): bool"
+  write,31,52,22,34,21,"public function write(string $outputPath, array $indexData, bool $dryRun, string $projectRoot): string"
+  skipMessage,54,57,4,54,21,"public function skipMessage(string $sourcePath, string $projectRoot, string $reason): string"
+  relativePath,59,67,9,59,29,"static private function relativePath(string $projectRoot, string $path): string"
