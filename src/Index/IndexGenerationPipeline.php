@@ -69,11 +69,25 @@ final readonly class IndexGenerationPipeline
 
         $callGraphStep = $this->callGraphGenerator->generate($config, $dryRun);
 
+        if ('failed' === $callGraphStep['status']) {
+            return [
+                'files' => $phpFiles,
+                'callGraph' => [],
+                'callGraphStep' => $callGraphStep,
+                'actions' => [],
+                'namespaceActions' => [],
+                'generated' => 0,
+                'skipped' => 0,
+                'warnings' => [],
+            ];
+        }
+
         $callGraph = [];
         if (!$dryRun) {
             $callGraph = $this->callGraphLoader->load(
                 (string) $config->callGraph['outputPath'],
                 $config->projectNamespacePrefix,
+                (bool) ($config->callGraph['includeVendorEdges'] ?? false),
             );
         }
 

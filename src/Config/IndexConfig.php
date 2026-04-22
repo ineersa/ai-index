@@ -7,7 +7,7 @@ namespace Ineersa\AiIndex\Config;
 final readonly class IndexConfig
 {
     /**
-     * @param array{outputPath: string, phpstanBin: string, configPath: string} $callGraph
+     * @param array{outputPath: string, phpstanBin: string, configPath: string, includeVendorEdges: bool} $callGraph
      * @param array{outputPath: string, kernelFactory: null|callable|string, environment: string, debug: bool, spec: string} $wiring
      * @param array{file: string, namespace: string} $indexSpec
      */
@@ -35,6 +35,7 @@ final readonly class IndexConfig
                 'outputPath' => $root.'/callgraph.json',
                 'phpstanBin' => $root.'/vendor/bin/phpstan',
                 'configPath' => $root.'/vendor/ineersa/call-graph/callgraph.neon',
+                'includeVendorEdges' => false,
             ],
             'wiring' => [
                 'outputPath' => $root.'/var/reports/di-wiring.toon',
@@ -69,6 +70,7 @@ final readonly class IndexConfig
                 'outputPath' => self::normalizePath((string) $merged['callGraph']['outputPath'], $root),
                 'phpstanBin' => self::normalizePath((string) $merged['callGraph']['phpstanBin'], $root),
                 'configPath' => self::normalizePath((string) $merged['callGraph']['configPath'], $root),
+                'includeVendorEdges' => (bool) ($merged['callGraph']['includeVendorEdges'] ?? false),
             ],
             wiring: [
                 'outputPath' => self::normalizePath((string) $merged['wiring']['outputPath'], $root),

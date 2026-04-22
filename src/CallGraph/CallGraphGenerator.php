@@ -19,7 +19,7 @@ final class CallGraphGenerator
 
         if (!is_file($callGraphConfigPath)) {
             return [
-                'status' => 'skipped',
+                'status' => 'failed',
                 'message' => sprintf('Call graph config not found at %s.', $callGraphConfigPath),
                 'command' => null,
                 'exitCode' => null,
@@ -28,7 +28,7 @@ final class CallGraphGenerator
 
         if (!is_file($phpstanBin)) {
             return [
-                'status' => 'skipped',
+                'status' => 'failed',
                 'message' => sprintf('PHPStan binary not found at %s.', $phpstanBin),
                 'command' => null,
                 'exitCode' => null,
@@ -58,13 +58,12 @@ final class CallGraphGenerator
 
         $output = trim(implode("\n", $lines));
         $callGraphPath = (string) ($config->callGraph['outputPath'] ?? '');
-        $callGraphExists = '' !== $callGraphPath && is_file($callGraphPath);
 
-        if (0 !== $exitCode && !$callGraphExists) {
+        if (0 !== $exitCode) {
             return [
-                'status' => 'skipped',
+                'status' => 'failed',
                 'message' => sprintf(
-                    'Call graph generation failed (exit=%d), proceeding without call graph data.%s',
+                    'Call graph generation failed (exit=%d).%s',
                     $exitCode,
                     '' !== $output ? "\n".$output : '',
                 ),
@@ -73,13 +72,10 @@ final class CallGraphGenerator
             ];
         }
 
-        if (0 !== $exitCode) {
+        if ('' === $callGraphPath || !is_file($callGraphPath)) {
             return [
-                'status' => 'skipped',
-                'message' => sprintf(
-                    'Call graph generation failed (exit=%d), reusing existing callgraph file.',
-                    $exitCode,
-                ),
+                'status' => 'failed',
+                'message' => sprintf('Call graph output not found at %s after successful run.', $callGraphPath),
                 'command' => $command,
                 'exitCode' => $exitCode,
             ];
@@ -87,7 +83,7 @@ final class CallGraphGenerator
 
         return [
             'status' => 'generated',
-            'message' => 'Call graph generated successfully.',
+            'message' => sprintf('Call graph generated successfully at %s.', $callGraphPath),
             'command' => $command,
             'exitCode' => $exitCode,
         ];

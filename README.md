@@ -18,7 +18,7 @@ Implemented:
 - DI wiring export from compiled Symfony container
 - class docs index generation (`src/**/docs/*.toon`)
 - namespace index regeneration (`src/**/ai-index.toon`)
-- optional callgraph integration (graceful fallback when unavailable)
+- mandatory callgraph generation via PHPStan + `ineersa/call-graph`
 
 Still recommended before first stable release:
 - add unit + integration test suites
@@ -33,6 +33,8 @@ Still recommended before first stable release:
 ```bash
 composer require --dev ineersa/ai-index
 ```
+
+This package now installs and uses `phpstan/phpstan` + `ineersa/call-graph` as runtime dependencies.
 
 ### Local path dependency (development)
 
@@ -115,9 +117,10 @@ vendor/bin/ai-index generate [--project-root=...] [--all|--changed|<targets...>]
 ```
 
 By default this command:
-1. exports DI wiring map,
-2. regenerates class docs indexes,
-3. regenerates namespace indexes (unless `--skip-namespace`).
+1. generates callgraph via PHPStan call-graph config,
+2. exports DI wiring map,
+3. regenerates class docs indexes,
+4. regenerates namespace indexes (unless `--skip-namespace`).
 
 Outputs:
 - `var/reports/di-wiring.toon`
@@ -143,6 +146,10 @@ return [
         'outputPath' => 'callgraph.json',
         'phpstanBin' => 'vendor/bin/phpstan',
         'configPath' => 'vendor/ineersa/call-graph/callgraph.neon',
+
+        // false by default: only App<->App edges
+        // true: include App<->Vendor edges too (still excludes Vendor<->Vendor-only edges)
+        'includeVendorEdges' => false,
     ],
 
     'wiring' => [
@@ -171,7 +178,8 @@ return [
 
 ## Notes / troubleshooting
 
-- Callgraph is optional. If PHPStan callgraph config is missing, generation continues without callers/callees.
+- Callgraph is mandatory for `generate`. If callgraph config/binary is missing or PHPStan callgraph run fails, `generate` aborts with error.
+- `callGraph.includeVendorEdges` is `false` by default.
 - `generate` and `wiring:export` need a bootable Symfony kernel in the target project unless `--skip-wiring` is used.
 - `vendor/bin/ai-index` is a Composer-generated proxy. The `../ineersa/ai-index/bin/ai-index` path inside that file is expected.
 

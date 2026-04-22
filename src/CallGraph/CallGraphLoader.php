@@ -9,7 +9,7 @@ final class CallGraphLoader
     /**
      * @return array<string, array<string, array{callers: list<string>, callees: list<string>}>>
      */
-    public function load(string $path, string $projectNamespacePrefix = ''): array
+    public function load(string $path, string $projectNamespacePrefix = '', bool $includeVendorEdges = false): array
     {
         if (!is_file($path)) {
             return [];
@@ -56,14 +56,29 @@ final class CallGraphLoader
                 continue;
             }
 
-            if ('' !== $namespacePrefix
-                && (!str_starts_with($callerClass, $namespacePrefix) || !str_starts_with($calleeClass, $namespacePrefix))
-            ) {
-                continue;
+            $callerIsProjectClass = true;
+            $calleeIsProjectClass = true;
+
+            if ('' !== $namespacePrefix) {
+                $callerIsProjectClass = str_starts_with($callerClass, $namespacePrefix);
+                $calleeIsProjectClass = str_starts_with($calleeClass, $namespacePrefix);
+
+                if ($includeVendorEdges) {
+                    if (!$callerIsProjectClass && !$calleeIsProjectClass) {
+                        continue;
+                    }
+                } elseif (!$callerIsProjectClass || !$calleeIsProjectClass) {
+                    continue;
+                }
             }
 
-            $map[$callerClass][$callerMethod]['callees'][] = $calleeClass.'::'.$calleeMethod;
-            $map[$calleeClass][$calleeMethod]['callers'][] = $callerClass.'::'.$callerMethod;
+            if ('' === $namespacePrefix || $callerIsProjectClass) {
+                $map[$callerClass][$callerMethod]['callees'][] = $calleeClass.'::'.$calleeMethod;
+            }
+
+            if ('' === $namespacePrefix || $calleeIsProjectClass) {
+                $map[$calleeClass][$calleeMethod]['callers'][] = $callerClass.'::'.$callerMethod;
+            }
         }
 
         foreach ($map as $className => $methods) {

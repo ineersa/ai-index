@@ -157,6 +157,9 @@ final class GenerateCommand extends Command
             $output->writeln(sprintf('<info>%s</info>', $message));
         } elseif ('failed' === $status) {
             $output->writeln(sprintf('<error>%s</error>', $message));
+            $output->writeln('<error>Aborting generation because call graph step failed.</error>');
+
+            return Command::FAILURE;
         } elseif ('' !== $message) {
             $output->writeln(sprintf('<comment>%s</comment>', $message));
         }

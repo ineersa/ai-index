@@ -32,7 +32,7 @@ Implemented `ai-index setup [--project-root=...] [--dry-run] [--force]` with ide
   - `src/CallGraph/CallGraphGenerator.php`
   - `src/CallGraph/CallGraphLoader.php`
 
-Supports `--all`, `--changed`, explicit targets, and graceful callgraph fallback.
+Supports `--all`, `--changed`, explicit targets, and strict callgraph execution.
 
 ---
 
@@ -86,6 +86,19 @@ Implemented original behavior parity:
 
 Result:
 - running `vendor/bin/ai-index generate ...` now produces wiring-enriched class `.toon` files by default (same intended flow as legacy orchestration).
+
+---
+
+## Phase 6 — strict callgraph + dependency enforcement
+
+Implemented:
+- Added `phpstan/phpstan` and `ineersa/call-graph` to package `require` dependencies.
+- `generate` now treats callgraph generation as mandatory:
+  - missing callgraph config/binary => failure
+  - PHPStan non-zero exit => failure
+  - missing callgraph output after successful run => failure
+- Pipeline now aborts index generation when callgraph step fails.
+- Added `callGraph.includeVendorEdges` config option (default `false`) to include App<->Vendor callers/callees when needed.
 
 ---
 
