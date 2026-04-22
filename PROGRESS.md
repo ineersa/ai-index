@@ -18,6 +18,7 @@ Implemented **Phase 1 + 2 + 3 + 4** for standalone `ai-index` package.
 - Templates:
   - `resources/templates/.agents/skills/ai-index/SKILL.md`
   - `resources/templates/.agents/index-maintainer.md`
+  - `resources/templates/.pi/extensions/ai-index-watch.ts`
   - `resources/templates/AGENTS.section.md`
 
 Implemented `ai-index setup [--project-root=...] [--dry-run] [--force]` with idempotent marker-based AGENTS upsert.

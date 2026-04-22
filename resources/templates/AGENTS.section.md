@@ -7,6 +7,10 @@ This repository uses AI index files for fast code navigation.
 
 Generated index files are managed via `vendor/bin/ai-index`.
 
+### IDE indexing rule
+
+- JetBrains IDEs must **not** index `*.toon` files (exclude them from indexing).
+
 ### Recommended commands
 
 - `vendor/bin/ai-index setup`

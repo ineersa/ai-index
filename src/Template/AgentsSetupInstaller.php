@@ -35,6 +35,13 @@ final readonly class AgentsSetupInstaller
             force: $force,
         );
 
+        $actions[] = $this->copyTemplate(
+            projectRoot: $projectRoot,
+            relativePath: '.pi/extensions/ai-index-watch.ts',
+            dryRun: $dryRun,
+            force: $force,
+        );
+
         $actions[] = $this->upsertAgentsSection($projectRoot, $dryRun);
 
         return $actions;

@@ -90,6 +90,7 @@ Behavior:
 - copies templates:
   - `.agents/skills/ai-index/SKILL.md`
   - `.agents/index-maintainer.md`
+  - `.pi/extensions/ai-index-watch.ts`
 - upserts `AGENTS.md` section between markers:
   - `<!-- ai-index:begin -->`
   - `<!-- ai-index:end -->`
